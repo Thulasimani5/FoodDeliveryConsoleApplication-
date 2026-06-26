@@ -30,4 +30,8 @@ public abstract class User {
     public String getPassword() {
         return password;
     }
+
+    public long getPhoneNo() {
+        return phone_no;
+    }
 }

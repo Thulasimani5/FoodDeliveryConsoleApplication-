@@ -16,4 +16,7 @@ public class Starter extends FoodItem {
 
         this.spiceLevel = spiceLevel;
     }
+    public void setSpiceLevel(SpiceLevel spiceLevel) {
+        this.spiceLevel = spiceLevel;
+    }
 }

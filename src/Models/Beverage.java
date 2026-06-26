@@ -22,4 +22,15 @@ public class Beverage extends FoodItem {
         this.sugarFree = sugarFree;
         this.isCold = isCold;
     }
+    public void setSize(BeverageSize size) {
+        this.size = size;
+    }
+
+    public void setSugarFree(boolean sugarFree) {
+        this.sugarFree = sugarFree;
+    }
+
+    public void setCold(boolean cold) {
+        isCold = cold;
+    }
 }

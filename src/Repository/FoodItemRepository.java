@@ -29,16 +29,4 @@ public class FoodItemRepository {
         return null;
     }
 
-    public List<FoodItem> getByRestaurantId(int restaurantId) {
-
-        List<FoodItem> restaurantFoods = new ArrayList<>();
-
-        for (FoodItem foodItem : dataStore.getFoodItems()) {
-            if (foodItem.getRestaurantId() == restaurantId) {
-                restaurantFoods.add(foodItem);
-            }
-        }
-
-        return restaurantFoods;
-    }
 }

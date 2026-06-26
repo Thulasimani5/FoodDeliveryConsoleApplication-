@@ -22,4 +22,15 @@ public class Dessert extends FoodItem {
         this.containsNuts = containsNuts;
         this.servedCold = servedCold;
     }
+    public void setEggless(boolean eggless) {
+        this.eggless = eggless;
+    }
+
+    public void setContainsNuts(boolean containsNuts) {
+        this.containsNuts = containsNuts;
+    }
+
+    public void setServedCold(boolean servedCold) {
+        this.servedCold = servedCold;
+    }
 }

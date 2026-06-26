@@ -65,4 +65,32 @@ public abstract class FoodItem {
     public int getRestaurantId() {
         return restaurant.getRestaurantId();
     }
+
+    public void setFoodName(String foodName) {
+        this.foodName = foodName;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
+    public void setFoodType(FoodType foodType) {
+        this.foodType = foodType;
+    }
+
+    public void setAvailable(boolean available) {
+        isAvailable = available;
+    }
+
+    public void setQuantityType(UnitType quantityType) {
+        this.quantityType = quantityType;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
 }

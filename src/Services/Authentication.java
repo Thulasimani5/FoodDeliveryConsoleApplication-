@@ -33,17 +33,49 @@ public class Authentication {
 
         System.out.println("Enter name :");
         name =sc.nextLine();
+        if (name.isEmpty()) {
+            System.out.println("Name cannot be empty.");
+            return;
+        }
 
         System.out.println("Enter phone_no :");
         phone_no = sc.nextLong();
         sc.nextLine();
+        if (!isValidPhone(phone_no)) {
+            System.out.println("Phone number must contain exactly 10 digits.");
+            return;
+        }
+        if (phoneExists(phone_no)) {
+            System.out.println("Phone number already registered.");
+            return;
+        }
 
         System.out.println("Enter email :");
         email = sc.nextLine();
+        if (!isValidEmail(email)) {
+            System.out.println("Invalid email format.");
+            return;
+        }
+
+        if (emailExists(email)) {
+            System.out.println("Email already exists.");
+            return;
+        }
 
         System.out.println("Enter password :");
         password = sc.nextLine();
+        if (!isValidPassword(password)) {
+            System.out.println("Password must be at least 8 characters.");
+            return;
+        }
 
+        System.out.print("Confirm Password : ");
+        String confirmPassword = sc.nextLine();
+
+        if (!password.equals(confirmPassword)) {
+            System.out.println("Passwords do not match.");
+            return;
+        }
         Role role = mainmenu_obj.show();
 
         if(role.equals(Role.Customer)) {
@@ -68,7 +100,16 @@ public class Authentication {
 
             System.out.print("Enter Pin Code: ");
             String pinCode = sc.nextLine();
+            if (isBlank(buildingNo)
+                    || isBlank(street)
+                    || isBlank(area)
+                    || isBlank(city)
+                    || isBlank(state)
+                    || isBlank(pinCode)) {
 
+                System.out.println("Address fields cannot be empty.");
+                return;
+            }
             Address address = new Address(
                     add_id,
                     buildingNo,
@@ -119,18 +160,49 @@ public class Authentication {
 
             System.out.print("Enter Pin Code: ");
             String pinCode = sc.nextLine();
+            if (isBlank(buildingNo)
+                    || isBlank(street)
+                    || isBlank(area)
+                    || isBlank(city)
+                    || isBlank(state)
+                    || isBlank(pinCode)) {
 
+                System.out.println("Address fields cannot be empty.");
+                return;
+            }
             System.out.print("Enter CuisineType: ");
             String type = sc.nextLine().toUpperCase();
-            RestaurantType cuisineType = RestaurantType.valueOf(type);
+            RestaurantType cuisineType;
 
-            System.out.print("Enter Opening time (HH:mm): ");
-            String t1 = sc.nextLine();
-            LocalTime openingTime = LocalTime.parse(t1);
+            try {
+                cuisineType = RestaurantType.valueOf(type);
+            }
+            catch (Exception e) {
+                System.out.println("Invalid Cuisine Type.");
+                return;
+            }
 
-            System.out.print("Enter time (HH:mm): ");
-            String t2 = sc.nextLine();
-            LocalTime closingTime = LocalTime.parse(t2);
+            LocalTime openingTime;
+            LocalTime closingTime;
+
+            try {
+
+                System.out.print("Enter Opening Time (HH:mm): ");
+                openingTime = LocalTime.parse(sc.nextLine());
+
+                System.out.print("Enter Closing Time (HH:mm): ");
+                closingTime = LocalTime.parse(sc.nextLine());
+
+            }
+            catch (Exception e) {
+                System.out.println("Invalid Time Format.");
+                return;
+            }
+
+            if (openingTime.isAfter(closingTime)) {
+                System.out.println("Opening time cannot be after closing time.");
+                return;
+            }
 
             Address address = new Address(
                     add_id,
@@ -214,6 +286,62 @@ public class Authentication {
                 }
             }
         }
+    }
+
+    private boolean isValidEmail(String email) {
+        return email.matches("^[A-Za-z0-9+_.-]+@(.+)$");
+    }
+
+    private boolean isValidPhone(Long phone) {
+        int count=0;
+        while(phone!=0)
+        {
+            phone/=10;
+            count++;
+        }
+        return (count == 10) ;
+    }
+
+    private boolean isValidPassword(String password) {
+        return password.length() >= 8;
+    }
+
+    private boolean isBlank(String value) {
+        return value == null || value.trim().isEmpty();
+    }
+
+    private boolean emailExists(String email) {
+
+        for (Customer c : dataStore.getCustomers()) {
+            if (c.getEmail().equalsIgnoreCase(email)) {
+                return true;
+            }
+        }
+
+        for (RestaurantOwner o : dataStore.getRestaurantOwners()) {
+            if (o.getEmail().equalsIgnoreCase(email)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean phoneExists(long phoneNo) {
+
+        for (Customer c : dataStore.getCustomers()) {
+            if (c.getPhoneNo() == phoneNo) {
+                return true;
+            }
+        }
+
+        for (RestaurantOwner o : dataStore.getRestaurantOwners()) {
+            if (o.getPhoneNo() == phoneNo) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     }

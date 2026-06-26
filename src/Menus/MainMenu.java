@@ -12,14 +12,14 @@ public class MainMenu {
         System.out.println("Enter the role : ");
         Scanner sc = new Scanner(System.in);
         int role = sc.nextInt();
-        AuthenticationMenu auth_obj = new AuthenticationMenu();
         switch (role) {
             case 1:
                 return Role.Customer;
             case 2:
                 return Role.RestaurantOwner;
             default:
-                return Role.Customer;
+                System.out.println("Invalid Role");
+                return null;
         }
     }
 }

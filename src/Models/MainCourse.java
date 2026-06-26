@@ -16,4 +16,7 @@ public class MainCourse extends FoodItem {
 
         this.servesPersons = servesPersons;
     }
+    public void setServesPersons(int servesPersons) {
+        this.servesPersons = servesPersons;
+    }
 }

@@ -26,7 +26,7 @@ public class OrderRepository {
         return customerOrders;
     }
 
-        public List<Order> getRestaurantOrders(int restaurantId) {
+    public List<Order> getRestaurantOrders(int restaurantId) {
 
         List<Order> restaurantOrders = new ArrayList<>();
 
