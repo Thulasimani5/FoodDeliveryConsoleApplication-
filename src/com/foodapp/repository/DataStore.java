@@ -2,8 +2,10 @@ package com.foodapp.repository;
 
 import com.foodapp.model.*;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.ArrayList;
 
  class DataStore {
 
@@ -15,18 +17,18 @@ import java.util.List;
         return instance;
     }
 
-    private final List<Customer> customers = new ArrayList<>();
-    private final List<RestaurantOwner> restaurantOwners = new ArrayList<>();
+    private final Map<String, Customer> customers = new HashMap<>();
+    private final Map<String, RestaurantOwner> restaurantOwners = new HashMap<>();
     private final List<Restaurant> restaurants = new ArrayList<>();
-    private final List<Order> orders = new ArrayList<>();
+    private final Map<Integer, Order> orders = new HashMap<>();
     private final List<FoodItem> foodItems = new ArrayList<>();
 
 
-    public List<Customer> getCustomers() {
+    public Map<String, Customer> getCustomers() {
         return customers;
     }
 
-    public List<RestaurantOwner> getRestaurantOwners() {
+    public Map<String, RestaurantOwner> getRestaurantOwners() {
         return restaurantOwners;
     }
 
@@ -34,7 +36,7 @@ import java.util.List;
         return restaurants;
     }
 
-    public List<Order> getOrders() {
+    public Map<Integer, Order> getOrders() {
         return orders;
     }
 

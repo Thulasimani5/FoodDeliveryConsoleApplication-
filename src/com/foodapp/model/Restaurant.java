@@ -6,40 +6,51 @@ import java.util.List;
 
 public class Restaurant {
 
-    private int restaurant_id;
-    private String restaurant_name;
-    private Address restaurant_address;
+    public enum RestaurantType {
+        INDIAN,
+        ITALIAN,
+        CHINESE,
+        MEXICAN,
+        AMERICAN,
+        JAPANESE,
+        FAST_FOOD,
+        BAKERY
+    }
+
+    private int restaurantId;
+    private String restaurantName;
+    private Address restaurantAddress;
     private List<Integer> menu;
     private RestaurantType cuisineType;
     private List<Integer> orderId;
     private LocalTime openingTime;
     private LocalTime closingTime;
-    private RestaurantOwner restaurantOwner;
+    private int restaurantOwnerId;
 
     public Restaurant(int restaurantId,
                       String restaurantName,
                       Address address,
                       RestaurantOwner restaurantOwner) {
 
-        this.restaurant_id = restaurantId;
-        this.restaurant_name = restaurantName;
-        this.restaurant_address = address;
-        this.restaurantOwner = restaurantOwner;
+        this.restaurantId = restaurantId;
+        this.restaurantName = restaurantName;
+        this.restaurantAddress = address;
+        this.restaurantOwnerId = restaurantOwner.getId();
 
         this.menu = new ArrayList<>();
         this.orderId = new ArrayList<>();
     }
 
     public int getRestaurantId() {
-        return restaurant_id;
+        return restaurantId;
     }
 
     public String getRestaurantName() {
-        return restaurant_name;
+        return restaurantName;
     }
 
     public Address getRestaurantAddress() {
-        return restaurant_address;
+        return restaurantAddress;
     }
 
     public RestaurantType getCuisineType() {
@@ -54,8 +65,8 @@ public class Restaurant {
         return closingTime;
     }
 
-    public RestaurantOwner getRestaurantOwner() {
-        return restaurantOwner;
+    public int getRestaurantOwnerId() {
+        return restaurantOwnerId;
     }
 
     public List<Integer> getRestaurantMenu() {
@@ -87,14 +98,14 @@ public class Restaurant {
     }
 
     public void setRestaurantName(String restaurantName) {
-        this.restaurant_name = restaurantName;
+        this.restaurantName = restaurantName;
     }
 
     public void setRestaurantAddress(Address restaurantAddress) {
-        this.restaurant_address = restaurantAddress;
+        this.restaurantAddress = restaurantAddress;
     }
 
-    public void setRestaurantOwner(RestaurantOwner restaurantOwner) {
-        this.restaurantOwner = restaurantOwner;
+    public void setRestaurantOwnerId(int restaurantOwnerId) {
+        this.restaurantOwnerId = restaurantOwnerId;
     }
 }

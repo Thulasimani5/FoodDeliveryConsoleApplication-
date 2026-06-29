@@ -2,36 +2,25 @@ package com.foodapp.repository;
 
 import com.foodapp.model.Customer;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class CustomerStore {
 
     private DataStore dataStore = DataStore.getInstance();
 
     public void addCustomer(Customer customer) {
-        dataStore.getCustomers().add(customer);
+        dataStore.getCustomers().put(customer.getEmail(), customer);
     }
 
     public List<Customer> getCustomers()
     {
-        return dataStore.getCustomers();
+        return new ArrayList<>(dataStore.getCustomers().values());
     }
 
     public Customer findByEmail(String email) {
-        for (Customer customer : dataStore.getCustomers()) {
-            if (customer.getEmail().equals(email)) {
-                return customer;
-            }
-        }
-        return null;
+        return dataStore.getCustomers().get(email);
     }
 
-    public Customer findById(int customerId) {
-        for (Customer customer : dataStore.getCustomers()) {
-            if (customer.getUser_id() == customerId) {
-                return customer;
-            }
-        }
-        return null;
-    }
 }

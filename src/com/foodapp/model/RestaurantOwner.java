@@ -19,6 +19,6 @@ public class RestaurantOwner extends User {
     }
     public int getId()
     {
-        return  super.user_id;
+        return  super.userId;
     }
 }

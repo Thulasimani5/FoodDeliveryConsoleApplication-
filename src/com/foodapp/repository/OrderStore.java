@@ -10,32 +10,19 @@ public class OrderStore {
     private DataStore dataStore = DataStore.getInstance();
 
     public void addOrder(Order order) {
-        dataStore.getOrders().add(order);
+        dataStore.getOrders().put(order.getOrderId(), order);
     }
 
     public List<Order> getOrders()
     {
-        return dataStore.getOrders();
-    }
-
-    public List<Order> getCustomerOrders(int customerId) {
-
-        List<Order> customerOrders = new ArrayList<>();
-
-        for (Order order : dataStore.getOrders()) {
-            if (order.getCustomerId() == customerId) {
-                customerOrders.add(order);
-            }
-        }
-
-        return customerOrders;
+        return new ArrayList<>(dataStore.getOrders().values());
     }
 
     public List<Order> getRestaurantOrders(int restaurantId) {
 
         List<Order> restaurantOrders = new ArrayList<>();
 
-        for (Order order : dataStore.getOrders()) {
+        for (Order order : dataStore.getOrders().values()) {
             if (order.getRestaurantId() == restaurantId) {
                 restaurantOrders.add(order);
             }
@@ -44,13 +31,6 @@ public class OrderStore {
     }
     public Order findById(int orderId) {
 
-        for (Order order : dataStore.getOrders()) {
-
-            if (order.getOrderId() == orderId) {
-                return order;
-            }
-        }
-
-        return null;
+        return dataStore.getOrders().get(orderId);
     }
 }

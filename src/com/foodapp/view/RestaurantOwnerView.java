@@ -1,6 +1,11 @@
 package com.foodapp.view;
 
 import com.foodapp.model.*;
+import com.foodapp.model.Beverage.BeverageSize;
+import com.foodapp.model.FoodItem.FoodType;
+import com.foodapp.model.FoodItem.UnitType;
+import com.foodapp.model.Order.OrderStatus;
+import com.foodapp.model.Starter.SpiceLevel;
 import com.foodapp.repository.OrderStore;
 import com.foodapp.service.FoodItemService;
 import com.foodapp.service.OrderService;
@@ -10,26 +15,26 @@ import java.util.List;
 import java.util.Scanner;
 
 public class RestaurantOwnerView {
-    Scanner sc = new Scanner(System.in);
+    Scanner scanner = new Scanner(System.in);
 
     private FoodItemService foodItemService = new FoodItemService();
     private OwnerOrderService ownerOrder = new OwnerOrderService();
     private OrderStore orderRepository = new OrderStore();
     private OrderService orderService = new OrderService();
 
-    public void restaurantDashboardMenu(int res_id) {
+    public void showRestaurantDashboard(int restaurantId) {
         boolean flag = true;
         while (flag) {
             System.out.println("1.Menu Management\n2. Order Management\n3.Exit");
             System.out.println("Enter the Option Number: ");
-            int auth = sc.nextInt();
+            int auth = scanner.nextInt();
 
             switch (auth) {
                 case 1:
-                    menu_management(res_id);
+                    manageMenu(restaurantId);
                     break;
                 case 2:
-                    order_management(res_id);
+                    manageOrders(restaurantId);
                     break;
                 case 3:
                     flag = false;
@@ -41,24 +46,41 @@ public class RestaurantOwnerView {
         }
     }
 
-    public void menu_management(int res_id) {
+    public void manageMenu(int restaurantId) {
+
+        List<FoodItem> foodItems = foodItemService.getFoodItems(restaurantId);
         boolean flag = true;
         while (flag) {
             System.out.println("1. Add Food Item\n2.Update Food Item\n3.Remove Food Item\n4.View Food Items\n5.Exit");
             System.out.println("Enter the Option Number: ");
-            int auth = sc.nextInt();
+            int auth = scanner.nextInt();
             switch (auth) {
                 case 1:
-                    addFoodItem(res_id);
+                    addFoodItem(restaurantId);
                     break;
                 case 2:
-                    updateFoodItem(res_id);
+
+                    if (foodItems.isEmpty()) {
+                        System.out.println("No Food Items Found.");
+                    } else {
+                        for (FoodItem item : foodItems) {
+                            displayFood(item);
+                        }
+                    }
+                    updateFoodItem(restaurantId);
                     break;
                 case 3:
-                    removeFoodItem(res_id);
+
+                    if (foodItems.isEmpty()) {
+                        System.out.println("No Food Items Found.");
+                    } else {
+                        for (FoodItem item : foodItems) {
+                            displayFood(item);
+                        }
+                    }
+                    removeFoodItem(restaurantId);
                     break;
                 case 4:
-                    List<FoodItem> foodItems = foodItemService.getFoodItems(res_id);
 
                     if (foodItems.isEmpty()) {
                         System.out.println("No Food Items Found.");
@@ -78,16 +100,16 @@ public class RestaurantOwnerView {
         }
     }
 
-    public void order_management(int res_id) {
+    public void manageOrders(int restaurantId) {
         boolean flag = true;
         while (flag) {
             System.out.println("1.View Available Orders\n2. View Accepted Orders\n3.View Completed Orders \n4.Exit");
             System.out.println("Enter the Option Number: ");
-            int auth = sc.nextInt();
+            int auth = scanner.nextInt();
 
             switch (auth) {
                 case 1:
-                    List<Order> pendingOrders = ownerOrder.getPendingOrders(res_id);
+                    List<Order> pendingOrders = ownerOrder.getPendingOrders(restaurantId);
                     if (pendingOrders.isEmpty()) {
                         System.out.println("No Pending Orders Found");
                         return;
@@ -97,10 +119,10 @@ public class RestaurantOwnerView {
                     for (Order order : pendingOrders) {
                         orderService.displayOrders(order);
                     }
-                    processPendingOrders(res_id);
+                    processPendingOrders(restaurantId);
                     break;
                 case 2:
-                    List<Order> acceptedOrders = ownerOrder.getAcceptedOrders(res_id);
+                    List<Order> acceptedOrders = ownerOrder.getAcceptedOrders(restaurantId);
                     if (acceptedOrders.isEmpty()) {
                         System.out.println("No Accepted Orders Found");
                         return;
@@ -112,10 +134,10 @@ public class RestaurantOwnerView {
 
                         orderService.displayOrders(order);
                     }
-                    processAcceptedOrders(res_id);
+                    processAcceptedOrders(restaurantId);
                     break;
                 case 3:
-                    List<Order> completedOrders = ownerOrder.getCompletedOrders(res_id);
+                    List<Order> completedOrders = ownerOrder.getCompletedOrders(restaurantId);
                     if (completedOrders.isEmpty()) {
                         System.out.println("No Completed Orders Found");
                         return;
@@ -138,28 +160,28 @@ public class RestaurantOwnerView {
         }
     }
 
-    public void addFoodItem(int res_id) {
+    public void addFoodItem(int restaurantId) {
 
-        sc.nextLine();
+        scanner.nextLine();
 
         System.out.print("Enter Food Name: ");
-        String foodName = sc.nextLine();
+        String foodName = scanner.nextLine();
 
         System.out.print("Enter Description: ");
-        String description = sc.nextLine();
+        String description = scanner.nextLine();
 
         System.out.print("Enter Price: ");
-        int price = sc.nextInt();
+        int price = scanner.nextInt();
 
         System.out.print("Enter Quantity: ");
-        int quantity = sc.nextInt();
-        sc.nextLine();
+        int quantity = scanner.nextInt();
+        scanner.nextLine();
 
         System.out.print("Enter Food Type (VEG/NONVEG): ");
-        FoodType foodType = FoodType.valueOf(sc.nextLine().toUpperCase());
+        FoodType foodType = FoodType.valueOf(scanner.nextLine().toUpperCase());
 
         System.out.print("Enter Quantity Type (PIECE/KG/GRAM/LITER): ");
-        UnitType unitType = UnitType.valueOf(sc.nextLine().toUpperCase());
+        UnitType unitType = UnitType.valueOf(scanner.nextLine().toUpperCase());
 
         System.out.println("""
                 1. Starter
@@ -169,8 +191,8 @@ public class RestaurantOwnerView {
                 """);
 
         System.out.print("Choose Category: ");
-        int category = sc.nextInt();
-        sc.nextLine();
+        int category = scanner.nextInt();
+        scanner.nextLine();
 
         String result;
 
@@ -178,12 +200,12 @@ public class RestaurantOwnerView {
 
             case 1:
 
-                System.out.print("Enter Spice Level: ");
+                System.out.print("Enter Spice Level (MILD, MEDIUM, SPICY, EXTRA_SPICY): ");
                 SpiceLevel spiceLevel =
-                        SpiceLevel.valueOf(sc.nextLine().toUpperCase());
+                        SpiceLevel.valueOf(scanner.nextLine().toUpperCase());
 
                 result = foodItemService.addStarter(
-                        res_id,
+                        restaurantId,
                         foodName,
                         description,
                         price,
@@ -197,7 +219,7 @@ public class RestaurantOwnerView {
             case 2:
 
                 result = foodItemService.addMainCourse(
-                        res_id,
+                        restaurantId,
                         foodName,
                         description,
                         price,
@@ -208,21 +230,18 @@ public class RestaurantOwnerView {
                 break;
 
             case 3:
-
-                sc.nextLine();
-
-                System.out.print("Enter Beverage Size: ");
+                System.out.print("Enter Beverage Size (SMALL/MEDIUM/LARGE): ");
                 BeverageSize size =
-                        BeverageSize.valueOf(sc.nextLine().toUpperCase());
+                        BeverageSize.valueOf(scanner.nextLine().toUpperCase());
 
                 System.out.print("Sugar Free (true/false): ");
-                boolean sugarFree = sc.nextBoolean();
+                boolean sugarFree = scanner.nextBoolean();
 
                 System.out.print("Cold Beverage (true/false): ");
-                boolean cold = sc.nextBoolean();
+                boolean cold = scanner.nextBoolean();
 
                 result = foodItemService.addBeverage(
-                        res_id,
+                        restaurantId,
                         foodName,
                         description,
                         price,
@@ -238,16 +257,16 @@ public class RestaurantOwnerView {
             case 4:
 
                 System.out.print("Eggless (true/false): ");
-                boolean eggless = sc.nextBoolean();
+                boolean eggless = scanner.nextBoolean();
 
                 System.out.print("Contains Nuts (true/false): ");
-                boolean nuts = sc.nextBoolean();
+                boolean nuts = scanner.nextBoolean();
 
                 System.out.print("Served Cold (true/false): ");
-                boolean servedCold = sc.nextBoolean();
+                boolean servedCold = scanner.nextBoolean();
 
                 result = foodItemService.addDessert(
-                        res_id,
+                        restaurantId,
                         foodName,
                         description,
                         price,
@@ -271,7 +290,7 @@ public class RestaurantOwnerView {
     public void removeFoodItem(int restaurantId) {
 
         System.out.print("Enter Food Id: ");
-        int foodId = sc.nextInt();
+        int foodId = scanner.nextInt();
 
         String result = foodItemService.removeFoodItem(restaurantId, foodId);
 
@@ -281,8 +300,8 @@ public class RestaurantOwnerView {
     public void updateFoodItem(int restaurantId) {
 
         System.out.print("Enter Food Id: ");
-        int foodId = sc.nextInt();
-        sc.nextLine();
+        int foodId = scanner.nextInt();
+        scanner.nextLine();
 
         while (true) {
 
@@ -300,8 +319,8 @@ public class RestaurantOwnerView {
                     """);
 
             System.out.print("Choose Option: ");
-            int choice = sc.nextInt();
-            sc.nextLine();
+            int choice = scanner.nextInt();
+            scanner.nextLine();
 
             String result;
 
@@ -313,7 +332,7 @@ public class RestaurantOwnerView {
                     result = foodItemService.updateFoodName(
                             restaurantId,
                             foodId,
-                            sc.nextLine()
+                            scanner.nextLine()
                     );
                     break;
 
@@ -323,7 +342,7 @@ public class RestaurantOwnerView {
                     result = foodItemService.updateDescription(
                             restaurantId,
                             foodId,
-                            sc.nextLine()
+                            scanner.nextLine()
                     );
                     break;
 
@@ -333,9 +352,9 @@ public class RestaurantOwnerView {
                     result = foodItemService.updatePrice(
                             restaurantId,
                             foodId,
-                            sc.nextInt()
+                            scanner.nextInt()
                     );
-                    sc.nextLine();
+                    scanner.nextLine();
                     break;
 
                 case 4:
@@ -344,9 +363,9 @@ public class RestaurantOwnerView {
                     result = foodItemService.updateQuantity(
                             restaurantId,
                             foodId,
-                            sc.nextInt()
+                            scanner.nextInt()
                     );
-                    sc.nextLine();
+                    scanner.nextLine();
                     break;
 
                 case 5:
@@ -355,7 +374,7 @@ public class RestaurantOwnerView {
                     result = foodItemService.updateFoodType(
                             restaurantId,
                             foodId,
-                            FoodType.valueOf(sc.nextLine().toUpperCase())
+                            FoodType.valueOf(scanner.nextLine().toUpperCase())
                     );
                     break;
 
@@ -365,7 +384,7 @@ public class RestaurantOwnerView {
                     result = foodItemService.updateUnitType(
                             restaurantId,
                             foodId,
-                            UnitType.valueOf(sc.nextLine().toUpperCase())
+                            UnitType.valueOf(scanner.nextLine().toUpperCase())
                     );
                     break;
 
@@ -375,9 +394,9 @@ public class RestaurantOwnerView {
                     result = foodItemService.updateAvailability(
                             restaurantId,
                             foodId,
-                            sc.nextBoolean()
+                            scanner.nextBoolean()
                     );
-                    sc.nextLine();
+                    scanner.nextLine();
                     break;
 
                 case 8:
@@ -389,8 +408,8 @@ public class RestaurantOwnerView {
                             """);
 
                     System.out.print("Choose Category: ");
-                    int category = sc.nextInt();
-                    sc.nextLine();
+                    int category = scanner.nextInt();
+                    scanner.nextLine();
 
                     switch (category) {
 
@@ -398,7 +417,7 @@ public class RestaurantOwnerView {
 
                             System.out.print("Enter Spice Level (MILD/MEDIUM/SPICY/EXTRA_SPICY): ");
                             SpiceLevel spiceLevel =
-                                    SpiceLevel.valueOf(sc.nextLine().toUpperCase());
+                                    SpiceLevel.valueOf(scanner.nextLine().toUpperCase());
 
                             result = foodItemService.updateStarter(
                                     restaurantId,
@@ -411,14 +430,14 @@ public class RestaurantOwnerView {
 
                             System.out.print("Enter Beverage Size (SMALL/MEDIUM/LARGE): ");
                             BeverageSize size =
-                                    BeverageSize.valueOf(sc.nextLine().toUpperCase());
+                                    BeverageSize.valueOf(scanner.nextLine().toUpperCase());
 
                             System.out.print("Sugar Free (true/false): ");
-                            boolean sugarFree = sc.nextBoolean();
+                            boolean sugarFree = scanner.nextBoolean();
 
                             System.out.print("Cold Beverage (true/false): ");
-                            boolean cold = sc.nextBoolean();
-                            sc.nextLine();
+                            boolean cold = scanner.nextBoolean();
+                            scanner.nextLine();
 
                             result = foodItemService.updateBeverage(
                                     restaurantId,
@@ -432,14 +451,14 @@ public class RestaurantOwnerView {
                         case 3:
 
                             System.out.print("Eggless (true/false): ");
-                            boolean eggless = sc.nextBoolean();
+                            boolean eggless = scanner.nextBoolean();
 
                             System.out.print("Contains Nuts (true/false): ");
-                            boolean nuts = sc.nextBoolean();
+                            boolean nuts = scanner.nextBoolean();
 
                             System.out.print("Served Cold (true/false): ");
-                            boolean servedCold = sc.nextBoolean();
-                            sc.nextLine();
+                            boolean servedCold = scanner.nextBoolean();
+                            scanner.nextLine();
 
                             result = foodItemService.updateDessert(
                                     restaurantId,
@@ -458,7 +477,6 @@ public class RestaurantOwnerView {
 
                 case 9:
                     return;
-
                 default:
                     result = "Invalid Choice";
             }
@@ -471,7 +489,7 @@ public class RestaurantOwnerView {
 
         while (true) {
             System.out.println("\nEnter Order ID to process (0 to Exit): ");
-            int orderId = sc.nextInt();
+            int orderId = scanner.nextInt();
 
             if (orderId == 0) {
                 break;
@@ -491,7 +509,7 @@ public class RestaurantOwnerView {
             System.out.println("2. Reject Order");
             System.out.print("Enter Choice: ");
 
-            int choice = sc.nextInt();
+            int choice = scanner.nextInt();
 
             switch (choice) {
                 case 1:
@@ -513,7 +531,7 @@ public class RestaurantOwnerView {
 
         while (true) {
             System.out.println("\nEnter Order ID to process (0 to Exit): ");
-            int orderId = sc.nextInt();
+            int orderId = scanner.nextInt();
 
             if (orderId == 0) {
                 break;
@@ -533,7 +551,7 @@ public class RestaurantOwnerView {
             System.out.println("2. Exit");
             System.out.print("Enter Choice: ");
 
-            int choice = sc.nextInt();
+            int choice = scanner.nextInt();
 
             switch (choice) {
                 case 1:
@@ -546,8 +564,7 @@ public class RestaurantOwnerView {
         }
     }
 
-    public void displayFood(FoodItem item)
-    {
+    public void displayFood(FoodItem item) {
         System.out.println("Food Id      : " + item.getFoodItemId());
         System.out.println("Food Name    : " + item.getFoodName());
         System.out.println("Description  : " + item.getDescription());

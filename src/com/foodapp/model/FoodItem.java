@@ -2,6 +2,18 @@ package com.foodapp.model;
 
 public abstract class FoodItem {
 
+    public enum FoodType {
+        VEG,
+        NONVEG
+    }
+
+    public enum UnitType {
+        PIECE,
+        KG,
+        GRAM,
+        LITER
+    }
+
     protected int foodId;
     protected String foodName;
     protected String description;

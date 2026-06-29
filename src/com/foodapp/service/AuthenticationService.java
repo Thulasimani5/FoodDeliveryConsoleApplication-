@@ -8,6 +8,7 @@ import com.foodapp.repository.CustomerStore;
 import com.foodapp.repository.OwnerStore;
 import com.foodapp.repository.RestaurantStore;
 import com.foodapp.model.*;
+import com.foodapp.model.Restaurant.RestaurantType;
 
 import java.time.LocalTime;
 
@@ -18,7 +19,7 @@ public class AuthenticationService {
     private RestaurantStore restaurantRepository = new RestaurantStore();
 
 
-    public int customerSignup(
+    public void customerSignup(
             String name,
             String phone,
             String email,
@@ -53,7 +54,6 @@ public class AuthenticationService {
         customer.setAddress(address);
         customer.setAddress(address);
         customerRepository.addCustomer(customer);
-        return  id;
     }
 
     public int ownerSignup(
@@ -117,36 +117,24 @@ public class AuthenticationService {
 
 
     public int customerLogin(String email, String password) {
-
-        for (Customer customer : customerRepository.getCustomers()) {
-
-            if (customer.getEmail().equals(email)) {
-
-                if (customer.getPassword().equals(password)) {
-                    return customer.getUser_id();
-                }
-
-                return -1; // Wrong password
+        Customer customer = customerRepository.findByEmail(email);
+        if (customer != null) {
+            if (customer.getPassword().equals(password)) {
+                return 1;
             }
+            return -1;
         }
-
-        return 0; // Email not found
+        return 0;
     }
 
     public int ownerLogin(String email, String password) {
-
-        for (RestaurantOwner owner : ownerRepository.getRestaurantOwners()) {
-
-            if (owner.getEmail().equals(email)) {
-
-                if (owner.getPassword().equals(password)) {
-                    return owner.getRestaurant().getRestaurantId();
-                }
-
-                return -1;
+        RestaurantOwner restaurantOwner = ownerRepository.findByEmail(email);
+        if (restaurantOwner != null) {
+            if (restaurantOwner.getPassword().equals(password)) {
+                return 1;
             }
+            return -1;
         }
-
         return 0;
     }
 

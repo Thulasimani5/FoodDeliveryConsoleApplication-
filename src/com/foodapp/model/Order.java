@@ -3,63 +3,75 @@ package com.foodapp.model;
 import java.util.List;
 
 public class Order {
-    private int order_id;
-    private int customer_id;
-    private int food_price;
-    private int delivery_fee;
-    private List<OrderItem> ordered_item;
-    private  OrderStatus order_status;
-    private  int restaurant_id;
+
+    public enum OrderStatus {
+        PENDING,
+        ACCEPTED,
+        REJECTED,
+        COMPLETED,
+        CANCELLED
+    }
+
+    private int orderId;
+    private String customerEmail;
+    private int foodPrice;
+    private int deliveryFee;
+    private List<OrderItem> orderedItems;
+    private OrderStatus orderStatus;
+    private int restaurantId;
+
     public Order(int orderId,
-                 int customerId,
+                 String customerEmail,
                  int restaurantId,
                  List<OrderItem> orderedItems) {
 
-        this.order_id = orderId;
-        this.customer_id = customerId;
-        this.restaurant_id = restaurantId;
-        this.ordered_item = orderedItems;
+        this.orderId = orderId;
+        this.customerEmail = customerEmail;
+        this.restaurantId = restaurantId;
+        this.orderedItems = orderedItems;
     }
-    public OrderStatus getStatus()
-    {
-        return order_status;
+
+    public OrderStatus getStatus() {
+        return orderStatus;
     }
+
     public int getOrderId() {
-        return order_id;
+        return orderId;
     }
 
     public int getFoodPrice() {
-        return food_price;
+        return foodPrice;
     }
 
     public int getDeliveryFee() {
-        return delivery_fee;
+        return deliveryFee;
     }
 
     public List<OrderItem> getOrderedItems() {
-        return ordered_item;
+        return orderedItems;
     }
 
     public OrderStatus getOrderStatus() {
-        return order_status;
+        return orderStatus;
     }
 
     public int getRestaurantId() {
-        return restaurant_id;
+        return restaurantId;
     }
+
     public void setFoodPrice(int foodPrice) {
-        this.food_price = foodPrice;
+        this.foodPrice = foodPrice;
     }
 
     public void setDeliveryFee(int deliveryFee) {
-        this.delivery_fee = deliveryFee;
+        this.deliveryFee = deliveryFee;
     }
 
     public void setOrderStatus(OrderStatus orderStatus) {
-        this.order_status = orderStatus;
+        this.orderStatus = orderStatus;
     }
-    public  int getCustomerId()
-    {
-        return customer_id;
+
+    public String getCustomerEmail() {
+        return customerEmail;
     }
 }

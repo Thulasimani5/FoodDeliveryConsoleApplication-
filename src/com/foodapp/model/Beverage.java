@@ -2,6 +2,12 @@ package com.foodapp.model;
 
 public class Beverage extends FoodItem {
 
+    public enum BeverageSize {
+        SMALL,
+        MEDIUM,
+        LARGE
+    }
+
     private BeverageSize size;
     private boolean sugarFree;
     private boolean isCold;

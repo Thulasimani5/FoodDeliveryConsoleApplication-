@@ -2,7 +2,7 @@ package com.foodapp.model;
 
 public class Address {
     private int addressId;
-    private String building_No;
+    private String buildingNumber;
     private String street;
     private String area;
     private String city;
@@ -12,7 +12,7 @@ public class Address {
     public Address(int addressId, String buildingNo, String street, String area, String city, String state, String pinCode)
     {
         this.addressId = addressId;
-        this.building_No = buildingNo;
+        this.buildingNumber = buildingNo;
         this.street = street;
         this.area = area;
         this.city = city;
@@ -28,8 +28,8 @@ public class Address {
         this.addressId = addressId;
     }
 
-    public String getBuilding_No() {
-        return building_No;
+    public String getBuildingNumber() {
+        return buildingNumber;
     }
 
     public String getStreet() {
@@ -52,8 +52,8 @@ public class Address {
         return pinCode;
     }
 
-    public void setBuilding_No(String building_No) {
-        this.building_No = building_No;
+    public void setBuildingNumber(String buildingNumber) {
+        this.buildingNumber = buildingNumber;
     }
 
     public void setArea(String area) {

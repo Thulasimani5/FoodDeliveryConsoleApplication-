@@ -1,7 +1,7 @@
 package com.foodapp.view;
 
-import com.foodapp.model.RestaurantType;
-import com.foodapp.model.Role;
+import com.foodapp.model.Restaurant.RestaurantType;
+import com.foodapp.model.User.Role;
 import com.foodapp.service.AuthenticationService;
 
 import java.time.LocalTime;
@@ -10,14 +10,11 @@ import java.util.Scanner;
 public class AuthenticationView {
 
     private AuthenticationService authenticationService = new AuthenticationService();
-    private Scanner sc = new Scanner(System.in);
+    private Scanner scanner = new Scanner(System.in);
     CustomerView customerView = new CustomerView();
     RestaurantOwnerView restaurantOwnerView = new RestaurantOwnerView();
+
     public void authenticationMenu(Role role) {
-
-        boolean flag = true;
-
-        while (flag) {
 
             System.out.println("\n========== Authentication ==========");
             System.out.println("1. Sign In");
@@ -25,7 +22,7 @@ public class AuthenticationView {
             System.out.println("3. Exit");
             System.out.print("Enter Choice : ");
 
-            int choice = Integer.parseInt(sc.nextLine());
+            int choice = Integer.parseInt(scanner.nextLine());
 
             switch (choice) {
 
@@ -38,14 +35,13 @@ public class AuthenticationView {
                     break;
 
                 case 3:
-                    flag = false;
                     System.out.println("Exited Successfully.");
                     break;
 
                 default:
                     System.out.println("Invalid Choice.");
             }
-        }
+
     }
 
     public void signUp(Role role) {
@@ -53,14 +49,14 @@ public class AuthenticationView {
         System.out.println("\n========== SIGN UP ==========");
 
         System.out.print("Enter Name : ");
-        String name = sc.nextLine();
+        String name = scanner.nextLine();
         if (name.isEmpty()) {
             System.out.println("Name cannot be empty.");
             return;
         }
 
         System.out.print("Enter Phone Number : ");
-        String phone = sc.nextLine();
+        String phone = scanner.nextLine();
         if (!authenticationService.isValidPhone(phone)) {
             System.out.println("Phone number must contain exactly 10 digits.");
             return;}
@@ -69,7 +65,7 @@ public class AuthenticationView {
             return;}
 
         System.out.print("Enter Email : ");
-        String email = sc.nextLine();
+        String email = scanner.nextLine();
         if (!authenticationService.isValidEmail(email)) {
             System.out.println("Invalid email format.");
             return;}
@@ -78,7 +74,7 @@ public class AuthenticationView {
             return;}
 
         System.out.print("Enter Password : ");
-        String password = sc.nextLine();
+        String password = scanner.nextLine();
         if (!authenticationService.isValidPassword(password)) {
             System.out.println("Password must contain:");
             System.out.println("- At least 8 characters");
@@ -89,7 +85,7 @@ public class AuthenticationView {
             return;
         }
         System.out.print("Confirm Password : ");
-        String confirmPassword = sc.nextLine();
+        String confirmPassword = scanner.nextLine();
         if (!password.equals(confirmPassword)) {
             System.out.println("Passwords do not match.");
             return;
@@ -99,22 +95,22 @@ public class AuthenticationView {
         if (role == Role.Customer) {
 
             System.out.print("Building No : ");
-            String building = sc.nextLine();
+            String building = scanner.nextLine();
 
             System.out.print("Street : ");
-            String street = sc.nextLine();
+            String street = scanner.nextLine();
 
             System.out.print("Area : ");
-            String area = sc.nextLine();
+            String area = scanner.nextLine();
 
             System.out.print("City : ");
-            String city = sc.nextLine();
+            String city = scanner.nextLine();
 
             System.out.print("State : ");
-            String state = sc.nextLine();
+            String state = scanner.nextLine();
 
             System.out.print("Pin Code : ");
-            String pinCode = sc.nextLine();
+            String pinCode = scanner.nextLine();
 
             if (authenticationService.isBlank(building)
                     || authenticationService.isBlank(street)
@@ -127,7 +123,7 @@ public class AuthenticationView {
                 return;
             }
 
-             int customerId =  authenticationService.customerSignup(
+             authenticationService.customerSignup(
                     name,
                     phone,
                     email,
@@ -139,30 +135,30 @@ public class AuthenticationView {
                     state,
                     pinCode
             );
-            customerView.customer_Menu(customerId);
+            customerView.showCustomerMenu(email);
 
         } else {
 
             System.out.print("Restaurant Name : ");
-            String restaurantName = sc.nextLine();
+            String restaurantName = scanner.nextLine();
 
             System.out.print("Building No : ");
-            String building = sc.nextLine();
+            String building = scanner.nextLine();
 
             System.out.print("Street : ");
-            String street = sc.nextLine();
+            String street = scanner.nextLine();
 
             System.out.print("Area : ");
-            String area = sc.nextLine();
+            String area = scanner.nextLine();
 
             System.out.print("City : ");
-            String city = sc.nextLine();
+            String city = scanner.nextLine();
 
             System.out.print("State : ");
-            String state = sc.nextLine();
+            String state = scanner.nextLine();
 
             System.out.print("Pin Code : ");
-            String pinCode = sc.nextLine();
+            String pinCode = scanner.nextLine();
 
             if (authenticationService.isBlank(building)
                     || authenticationService.isBlank(street)
@@ -175,8 +171,8 @@ public class AuthenticationView {
                 return;
             }
 
-            System.out.print("Cuisine Type : ");
-            String cuisine = sc.nextLine();
+            System.out.print("Cuisine Type (INDIAN/ITALIAN/CHINESE/MEXICAN/AMERICAN/JAPANESE/FAST_FOOD/BAKERY): ");
+            String cuisine = scanner.nextLine();
             RestaurantType cuisineType;
 
             try {
@@ -193,10 +189,10 @@ public class AuthenticationView {
             try {
 
                 System.out.print("Enter Opening Time (HH:mm): ");
-                openingTime = LocalTime.parse(sc.nextLine());
+                openingTime = LocalTime.parse(scanner.nextLine());
 
                 System.out.print("Enter Closing Time (HH:mm): ");
-                closingTime = LocalTime.parse(sc.nextLine());
+                closingTime = LocalTime.parse(scanner.nextLine());
 
             }
             catch (Exception e) {
@@ -209,7 +205,7 @@ public class AuthenticationView {
                 return;
             }
 
-            int  restaurantId = authenticationService.ownerSignup(
+            int restaurantId = authenticationService.ownerSignup(
                     name,
                     phone,
                     email,
@@ -225,7 +221,7 @@ public class AuthenticationView {
                     openingTime,
                     closingTime
             );
-            restaurantOwnerView.restaurantDashboardMenu(restaurantId);
+            restaurantOwnerView.showRestaurantDashboard(restaurantId);
         }
     }
 
@@ -234,21 +230,21 @@ public class AuthenticationView {
         System.out.println("\n========== LOGIN ==========");
 
         System.out.print("Enter Email : ");
-        String email = sc.nextLine();
+        String email = scanner.nextLine();
 
         System.out.print("Enter Password : ");
-        String password = sc.nextLine();
+        String password = scanner.nextLine();
 
         password = authenticationService.hashPassword(password);
 
         if (role == Role.Customer) {
 
-            int customerId = authenticationService.customerLogin(email, password);
+            int status = authenticationService.customerLogin(email, password);
 
-            if (customerId > 0) {
+            if (status == 1) {
                 System.out.println("Login Successful");
-                customerView.customer_Menu(customerId);
-            } else if (customerId == -1) {
+                customerView.showCustomerMenu(email);
+            } else if (status == -1) {
                 System.out.println("Wrong Password");
             } else {
                 System.out.println("Email Not Found");
@@ -261,7 +257,7 @@ public class AuthenticationView {
 
             if (restaurantId > 0) {
                 System.out.println("Login Successful");
-                restaurantOwnerView.restaurantDashboardMenu(restaurantId);
+                restaurantOwnerView.showRestaurantDashboard(restaurantId);
             } else if (restaurantId == -1) {
                 System.out.println("Wrong Password");
             } else {

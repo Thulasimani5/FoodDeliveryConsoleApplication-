@@ -1,14 +1,14 @@
 package com.foodapp.service;
 
 import com.foodapp.model.FoodItem;
-import com.foodapp.model.FoodType;
-import com.foodapp.model.BeverageSize;
+import com.foodapp.model.FoodItem.FoodType;
+import com.foodapp.model.FoodItem.UnitType;
+import com.foodapp.model.Beverage;
+import com.foodapp.model.Beverage.BeverageSize;
 import com.foodapp.model.Restaurant;
 import com.foodapp.model.Starter;
-import com.foodapp.model.SpiceLevel;
-import com.foodapp.model.UnitType;
+import com.foodapp.model.Starter.SpiceLevel;
 import com.foodapp.model.MainCourse;
-import com.foodapp.model.Beverage;
 import com.foodapp.model.Dessert;
 import com.foodapp.repository.FoodStore;
 import com.foodapp.repository.RestaurantStore;
@@ -209,6 +209,7 @@ public class FoodItemService {
 
         return "Food Name Updated Successfully.";
     }
+
     public String updateDescription(int restaurantId, int foodId, String description) {
 
         FoodItem item = getFoodItem(restaurantId, foodId);
@@ -220,6 +221,7 @@ public class FoodItemService {
 
         return "Description Updated Successfully.";
     }
+
     public String updatePrice(int restaurantId, int foodId, int price) {
 
         FoodItem item = getFoodItem(restaurantId, foodId);
@@ -231,6 +233,7 @@ public class FoodItemService {
 
         return "Price Updated Successfully.";
     }
+
     public String updateQuantity(int restaurantId, int foodId, int quantity) {
 
         FoodItem item = getFoodItem(restaurantId, foodId);
@@ -242,6 +245,7 @@ public class FoodItemService {
 
         return "Quantity Updated Successfully.";
     }
+
     public String updateFoodType(int restaurantId,
                                  int foodId,
                                  FoodType foodType) {
@@ -255,6 +259,7 @@ public class FoodItemService {
 
         return "Food Type Updated Successfully.";
     }
+
     public String updateUnitType(int restaurantId,
                                  int foodId,
                                  UnitType unitType) {
@@ -324,6 +329,7 @@ public class FoodItemService {
 
         return "Beverage Updated Successfully.";
     }
+
     public String updateDessert(int restaurantId,
                                 int foodId,
                                 boolean eggless,

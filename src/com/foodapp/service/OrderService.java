@@ -5,6 +5,7 @@ import com.foodapp.repository.FoodStore;
 import com.foodapp.repository.OrderStore;
 import com.foodapp.repository.RestaurantStore;
 import com.foodapp.model.*;
+import com.foodapp.model.Order.OrderStatus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.List;
 public class OrderService {
 
     RestaurantStore restaurantRepository = new RestaurantStore();
-    FoodStore foodItemRepository= new FoodStore();
+    FoodStore foodItemRepository = new FoodStore();
     OrderStore orderRepository = new OrderStore();
     CustomerStore customerRepository = new CustomerStore();
 
@@ -28,7 +29,7 @@ public class OrderService {
     }
 
     public String placeOrder(
-            int customerId,
+            String customerEmail,
             int restaurantId,
             ArrayList<OrderItem> items) {
 
@@ -38,7 +39,7 @@ public class OrderService {
             return "Restaurant Not Found";
         }
 
-        Customer customer = customerRepository.findById(customerId);
+        Customer customer = customerRepository.findByEmail(customerEmail);
 
         if (customer == null) {
             return "Customer Not Found";
@@ -54,7 +55,7 @@ public class OrderService {
 
         Order order = new Order(
                 orderId,
-                customerId,
+                customerEmail,
                 restaurantId,
                 items
         );
@@ -71,11 +72,11 @@ public class OrderService {
         return "Order Placed Successfully";
     }
 
-    public List<Order> getCurrentOrders(int customerId) {
+    public List<Order> getCurrentOrders(String customerEmail) {
 
         List<Order> currentOrders = new ArrayList<>();
 
-        Customer customer = customerRepository.findById(customerId);
+        Customer customer = customerRepository.findByEmail(customerEmail);
 
         if (customer == null) {
             return currentOrders;
@@ -96,11 +97,11 @@ public class OrderService {
         return currentOrders;
     }
 
-    public List<Order> getOrderHistory(int customerId) {
+    public List<Order> getOrderHistory(String customerEmail) {
 
         List<Order> orderHistory = new ArrayList<>();
 
-        Customer customer = customerRepository.findById(customerId);
+        Customer customer = customerRepository.findByEmail(customerEmail);
 
         if (customer == null) {
             return orderHistory;
@@ -139,10 +140,9 @@ public class OrderService {
         return "Order Cancelled Successfully.";
     }
 
-    public void displayOrders(Order order)
-    {
+    public void displayOrders(Order order) {
         System.out.println("Order Id      : " + order.getOrderId());
-        System.out.println("Customer ID   : " + order.getCustomerId());
+        System.out.println("Customer Email: " + order.getCustomerEmail());
         System.out.println("Restaurant Id : " + order.getRestaurantId());
         System.out.println("Status        : " + order.getOrderStatus());
         System.out.println("Items:");

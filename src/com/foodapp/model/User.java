@@ -1,19 +1,24 @@
 package com.foodapp.model;
 
 public abstract class User {
-    protected int user_id;
+    protected int userId;
     protected String name;
     protected String email;
-    protected String phone_no;
+    protected String phoneNumber;
     protected String password;
     protected Role role;
+
+    public enum Role {
+        Customer,
+        RestaurantOwner
+    }
 
     public User(int userId,
                 String email,
                 String password,
                 Role role) {
 
-        this.user_id = userId;
+        this.userId = userId;
         this.email = email;
         this.password = password;
         this.role = role;
@@ -23,7 +28,7 @@ public abstract class User {
     }
 
     public void setPhoneNo(String phoneNo) {
-        this.phone_no = phoneNo;
+        this.phoneNumber = phoneNo;
     }
 
     public void setEmail(String email) {
@@ -46,8 +51,8 @@ public abstract class User {
         return role;
     }
 
-    public int getUser_id() {
-        return user_id;
+    public int getUserId() {
+        return userId;
     }
 
     public String getEmail() {
@@ -59,6 +64,6 @@ public abstract class User {
     }
 
     public String getPhoneNo() {
-        return phone_no;
+        return phoneNumber;
     }
 }

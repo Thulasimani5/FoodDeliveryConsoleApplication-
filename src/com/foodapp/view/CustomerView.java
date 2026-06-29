@@ -17,25 +17,26 @@ public class CustomerView {
     RestaurantService res = new RestaurantService();
     OrderService orderService = new OrderService();
     private RestaurantStore restaurantRepository = new RestaurantStore();
-    Scanner sc = new Scanner(System.in);
+    Scanner scanner = new Scanner(System.in);
 
-    public void customer_Menu(int customerId)
+    public void showCustomerMenu(String email)
     {
         boolean flag=true;
         while(flag) {
             System.out.println("1.BrowseRestaurant \n2.Orders\n3.Exit");
             System.out.println("Enter the Option : ");
-            int auth = sc.nextInt();
+            int auth = scanner.nextInt();
 
             switch (auth) {
                 case 1:
-                    browseRes_menu(customerId);
+                    browseRestaurantMenu(email);
                     break;
                 case 2:
-                    order_menu(customerId);
+                    showOrderMenu(email);
                     break;
                 case 3:
                     System.out.println("Exited");
+                    flag = false;
                     break;
                 default:
                     System.out.println("Invalid Option");
@@ -44,7 +45,7 @@ public class CustomerView {
     }
 
 
-    public void browseRes_menu(int customerId)
+    public void browseRestaurantMenu(String email)
     {
         if(restaurantRepository.getAllRestaurants().isEmpty())
         {
@@ -62,36 +63,36 @@ public class CustomerView {
             }
             System.out.println("1.Select Restaurant \n2.Search Restaurant\n3.Exit");
             System.out.println("Enter the Option : ");
-            int auth = sc.nextInt();
-            int res_id;
+            int auth = scanner.nextInt();
+            int restaurantId;
 
             switch (auth) {
                 case 1:
                     System.out.println("Enter the Selected Restaurant Id : ");
-                    res_id = sc.nextInt();
-                    if(res.getRestaurantMenu(res_id).isEmpty())
+                    restaurantId = scanner.nextInt();
+                    if(res.getRestaurantMenu(restaurantId).isEmpty())
                     {
                         System.out.println("No Food items Found");
                     }
                     else {
-                        for (FoodItem item : res.getRestaurantMenu(res_id)) {
+                        for (FoodItem item : res.getRestaurantMenu(restaurantId)) {
                             displayFood(item);
                         }
-                        food_menu(res_id , customerId);
+                        showFoodMenu(restaurantId , email);
                     }
                     break;
                 case 2:
                     System.out.println("Enter the Search Restaurant Id : ");
-                    res_id = sc.nextInt();
-                    if(res.getRestaurantMenu(res_id).isEmpty())
+                    restaurantId = scanner.nextInt();
+                    if(res.getRestaurantMenu(restaurantId).isEmpty())
                     {
                         System.out.println("No Food items Found");
                     }
                     else {
-                        for (FoodItem item : res.getRestaurantMenu(res_id)) {
+                        for (FoodItem item : res.getRestaurantMenu(restaurantId)) {
                             displayFood(item);
                         }
-                        food_menu(res_id , customerId);
+                        showFoodMenu(restaurantId , email);
                     }
                     break;
                 case 3:
@@ -104,15 +105,15 @@ public class CustomerView {
 
     }
 
-    public void food_menu(int restaurantId, int customerId)
+    public void showFoodMenu(int restaurantId, String email)
     {
         System.out.println("1.Select Food \n2.Back to Restaurant");
         System.out.println("Enter the Option : ");
-        int auth = sc.nextInt();
+        int auth = scanner.nextInt();
 
         switch (auth) {
             case 1:
-                placeOrder(customerId, restaurantId);
+                placeOrder(email, restaurantId);
                 break;
 
             case 2:
@@ -123,7 +124,7 @@ public class CustomerView {
         }
     }
 
-    public void placeOrder(int customerId, int restaurantId) {
+    public void placeOrder(String email, int restaurantId) {
 
         ArrayList<OrderItem> items = new ArrayList<>();
 
@@ -132,7 +133,7 @@ public class CustomerView {
         while (flag) {
 
             System.out.print("Enter Food Id : ");
-            int foodId = sc.nextInt();
+            int foodId = scanner.nextInt();
 
             FoodItem foodItem = foodItemRepository.findById(foodId);
 
@@ -142,7 +143,7 @@ public class CustomerView {
             }
 
             System.out.print("Enter Quantity : ");
-            int quantity = sc.nextInt();
+            int quantity = scanner.nextInt();
             OrderItem item = orderService.createOrderItem(foodId,quantity);
             items.add(item);
 
@@ -150,7 +151,7 @@ public class CustomerView {
             System.out.println("1.Yes");
             System.out.println("2.No");
 
-            int option = sc.nextInt();
+            int option = scanner.nextInt();
 
             if (option == 2) {
 
@@ -158,7 +159,7 @@ public class CustomerView {
                 System.out.println("1.Yes");
                 System.out.println("2.No");
 
-                option = sc.nextInt();
+                option = scanner.nextInt();
 
                 if (option == 1) {
                     flag = false;
@@ -169,7 +170,7 @@ public class CustomerView {
         }
 
         String result = orderService.placeOrder(
-                customerId,
+                email,
                 restaurantId,
                 items
         );
@@ -177,19 +178,19 @@ public class CustomerView {
         System.out.println(result);
     }
 
-    public void order_menu(int customerId)
+    public void showOrderMenu(String email)
     {
         boolean flag=true;
         while(flag) {
             System.out.println("1.Current Order \n2.Completed order\n3.Exit");
             System.out.println("Enter the Option : ");
-            int auth = sc.nextInt();
+            int auth = scanner.nextInt();
             switch (auth) {
                 case 1:
-                    current_order(customerId);
+                    showCurrentOrder(email);
                     break;
                 case 2:
-                    List<Order> orderHistory = orderService.getOrderHistory(customerId);
+                    List<Order> orderHistory = orderService.getOrderHistory(email);
                     if (orderHistory.isEmpty()) {
                         System.out.println("No Order History  Found.");
                     } else {
@@ -199,6 +200,7 @@ public class CustomerView {
                     }
                     break;
                 case 3:
+                    flag= false;
                     System.out.println("Exited");
                     break;
                 default:
@@ -207,9 +209,9 @@ public class CustomerView {
         }
     }
 
-    public void current_order(int customerId)
+    public void showCurrentOrder(String email)
     {
-        List<Order> currentOrders = orderService.getCurrentOrders(customerId);
+        List<Order> currentOrders = orderService.getCurrentOrders(email);
         if(currentOrders.isEmpty())
         {
             System.out.println("No Current Orders Found.");
@@ -221,12 +223,12 @@ public class CustomerView {
         }
         System.out.println("1.Cancel Order\n2.Exit");
         System.out.println("Enter the Option : ");
-        int auth = sc.nextInt();
+        int auth = scanner.nextInt();
         switch (auth) {
             case 1:
                 int id;
                 System.out.println("Enter the Order Id : ");
-                id = sc.nextInt();
+                id = scanner.nextInt();
                 orderService.cancelOrder(id);
                 break;
             case 2:
