@@ -126,7 +126,7 @@ public class CustomerView {
 
     public void placeOrder(String email, int restaurantId) {
 
-        ArrayList<OrderItem> items = new ArrayList<>();
+        ArrayList<Integer> items = new ArrayList<>();
 
         boolean flag = true;
 
@@ -144,7 +144,11 @@ public class CustomerView {
 
             System.out.print("Enter Quantity : ");
             int quantity = scanner.nextInt();
-            OrderItem item = orderService.createOrderItem(foodId,quantity);
+            int item = orderService.createOrderItem(foodId,quantity);
+            if(item ==0 )
+            {
+                System.out.println("Food item not Found");
+            }
             items.add(item);
 
             System.out.println("Continue Buying?");
@@ -230,6 +234,7 @@ public class CustomerView {
                 System.out.println("Enter the Order Id : ");
                 id = scanner.nextInt();
                 orderService.cancelOrder(id);
+                System.out.println("Order Cancelled Successfully");
                 break;
             case 2:
                 System.out.println("Exited");

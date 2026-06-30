@@ -1,0 +1,148 @@
+# FOOD DELIVERY DATABASE DESIGN
+
+## CUSTOMER TABLE
+
++-----------------+------------------------------------------+-------------------------------------------+
+| Column          | Data Type                                | Constraint                                |
++-----------------+------------------------------------------+-------------------------------------------+
+| user_id         | INT                                      | PRIMARY KEY                               |
+| name            | VARCHAR(100)                             | NOT NULL                                  |
+| email           | VARCHAR(100)                             | UNIQUE, NOT NULL                          |
+| phone_number    | VARCHAR(15)                              | UNIQUE, NOT NULL                          |
+| password        | VARCHAR(255)                             | NOT NULL                                  |
+| role            | ENUM('Customer','RestaurantOwner')       | NOT NULL                                  |
+| building_number | VARCHAR(20)                              | NOT NULL                                  |
+| street          | VARCHAR(100)                             | NOT NULL                                  |
+| area            | VARCHAR(100)                             | NOT NULL                                  |
+| city            | VARCHAR(50)                              | NOT NULL                                  |
+| state           | VARCHAR(50)                              | NOT NULL                                  |
+| pin_code        | VARCHAR(10)                              | NOT NULL                                  |
++-----------------+------------------------------------------+-------------------------------------------+
+
+## RESTAURANT OWNER TABLE
+
++--------------+------------------------------------------+-------------------------------------------+
+| Column       | Data Type                                | Constraint                                |
++--------------+------------------------------------------+-------------------------------------------+
+| user_id      | INT                                      | PRIMARY KEY                               |
+| name         | VARCHAR(100)                             | NOT NULL                                  |
+| email        | VARCHAR(100)                             | UNIQUE, NOT NULL                          |
+| phone_number | VARCHAR(15)                              | UNIQUE, NOT NULL                          |
+| password     | VARCHAR(255)                             | NOT NULL                                  |
+| role         | ENUM('Customer','RestaurantOwner')       | NOT NULL                                  |
++--------------+------------------------------------------+-------------------------------------------+
+
+## RESTAURANT TABLE
+
++-----------------+---------------------------------------------------------------------+-------------------------------------------+
+| Column          | Data Type                                                           | Constraint                                |
++-----------------+---------------------------------------------------------------------+-------------------------------------------+
+| restaurant_id   | INT                                                                 | PRIMARY KEY                               |
+| restaurant_name | VARCHAR(100)                                                        | NOT NULL                                  |
+| owner_id        | INT                                                                 | FOREIGN KEY → RestaurantOwner(user_id)    |
+| cuisine_type    | ENUM('INDIAN','ITALIAN','CHINESE','MEXICAN','AMERICAN',             | NOT NULL                                  |
+|                 |      'JAPANESE','FAST_FOOD','BAKERY')                               |                                           |
+| opening_time    | TIME                                                                | NOT NULL                                  |
+| closing_time    | TIME                                                                | NOT NULL                                  |
+| building_number | VARCHAR(20)                                                         | NOT NULL                                  |
+| street          | VARCHAR(100)                                                        | NOT NULL                                  |
+| area            | VARCHAR(100)                                                        | NOT NULL                                  |
+| city            | VARCHAR(50)                                                         | NOT NULL                                  |
+| state           | VARCHAR(50)                                                         | NOT NULL                                  |
+| pin_code        | VARCHAR(10)                                                         | NOT NULL                                  |
++-----------------+---------------------------------------------------------------------+-------------------------------------------+
+
+## FOOD ITEM TABLE
+
++---------------+--------------------------------------+--------------------------------+
+| Column        | Data Type                            | Constraint                     |
++---------------+--------------------------------------+--------------------------------+
+| food_id       | INT                                  | PRIMARY KEY                    |
+| restaurant_id | INT                                  | FOREIGN KEY                    |
+| food_name     | VARCHAR(100)                         |                                | NOT NULL
+| description   | VARCHAR(255)                         |                                | NOT NULL
+| price         | DECIMAL(10,2)                        |                                | NOT NULL
+| food_type     | ENUM('VEG','NONVEG')                 |                                | NOT NULL
+| quantity      | INT                                  |                                | NOT NULL
+| quantity_type | ENUM('PIECE','KG','GRAM','LITER')    |                                | NOT NULL
+| is_available  | BOOLEAN                              |                                | NOT NULL
++---------------+--------------------------------------+--------------------------------+
+
+## STARTER TABLE
+
++-------------+----------------------------------------------+
+| Column      | Data Type                                    |
++-------------+----------------------------------------------+
+| food_id     | INT (PK, FK → FoodItem.food_id)              |
+| spice_level | ENUM('MILD','MEDIUM','SPICY','EXTRA_SPICY')  |
++-------------+----------------------------------------------+
+
+## MAIN COURSE TABLE
+
++----------+--------------------------------+
+| Column   | Data Type                      |
++----------+--------------------------------+
+| food_id  | INT (PK, FK → FoodItem.food_id)|
++----------+--------------------------------+
+
+## BEVERAGE TABLE
+
++-------------+-------------------------------------------+
+| Column      | Data Type                                 |
++-------------+-------------------------------------------+
+| food_id     | INT (PK, FK → FoodItem.food_id)           |
+| size        | ENUM('SMALL','MEDIUM','LARGE')            |
+| sugar_free  | BOOLEAN                                   |
+| is_cold     | BOOLEAN                                   |
++-------------+-------------------------------------------+
+
+## DESSERT TABLE
+
++----------------+------------------------------------------+
+| Column         | Data Type                                |
++----------------+------------------------------------------+
+| food_id        | INT (PK, FK → FoodItem.food_id)          |
+| eggless        | BOOLEAN                                  |
+| contains_nuts  | BOOLEAN                                  |
+| served_cold    | BOOLEAN                                  |
++----------------+------------------------------------------+
+
+## ORDER TABLE
+
++----------------+-----------------------------------------------------+----------------------------------------+
+| Column         | Data Type                                           | Constraint                             |
++----------------+-----------------------------------------------------+----------------------------------------+
+| order_id       | INT                                                 | PRIMARY KEY                            |
+| customer_ID |  INT | FOREIGN KEY → Customer(user_id)          |
+| restaurant_id  | INT                                                 | FOREIGN KEY → Restaurant(restaurant_id)|
+| food_price     | DECIMAL(10,2)                                       | NOT NULL                               |
+| delivery_fee   | DECIMAL(10,2)                                       | NOT NULL                               |
+| order_status   | ENUM('PENDING','ACCEPTED','REJECTED',               | NOT NULL                               |
+|                |      'COMPLETED','CANCELLED')                       |                                        |
++----------------+-----------------------------------------------------+----------------------------------------+
+
+## ORDER ITEM TABLE
+
++----------------+----------------------------------------------------+----------------------------------+
+| Column         | Data Type                                          | Key                              |
++----------------+----------------------------------------------------+----------------------------------+
+| order_item_id  | INT                                                | PRIMARY KEY                      |
+| order_id       | INT                                                | FK → Order.order_id              |
+| food_id        | INT                                                |                                  |
+| food_name      | VARCHAR(100)                                       |                                  |
+| description    | TEXT                                               |                                  |
+| price          | INT                                                |                                  |
+| food_type      | ENUM('VEG','NONVEG')                               |                                  |
+| quantity_type  | ENUM('PIECE','KG','GRAM','LITER')                  |                                  |
+| quantity       | INT                                                |                                  |
+| is_available   | BOOLEAN                                            |                                  |
+| restaurant_id  | INT                                                |                                  |
+| category       | ENUM('STARTER','MAIN_COURSE','BEVERAGE','DESSERT') |                                  |
+| spice_level    | ENUM('MILD','MEDIUM','SPICY','EXTRA_SPICY')        | NULL                             |
+| beverage_size  | ENUM('SMALL','MEDIUM','LARGE')                     | NULL                             |
+| sugar_free     | BOOLEAN                                            | NULL                             |
+| is_cold        | BOOLEAN                                            | NULL                             |
+| eggless        | BOOLEAN                                            | NULL                             |
+| contains_nuts  | BOOLEAN                                            | NULL                             |
+| served_cold    | BOOLEAN                                            | NULL                             |
++----------------+----------------------------------------------------+----------------------------------+

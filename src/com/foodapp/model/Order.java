@@ -16,14 +16,14 @@ public class Order {
     private String customerEmail;
     private int foodPrice;
     private int deliveryFee;
-    private List<OrderItem> orderedItems;
+    private List<Integer> orderedItems;
     private OrderStatus orderStatus;
     private int restaurantId;
 
     public Order(int orderId,
                  String customerEmail,
                  int restaurantId,
-                 List<OrderItem> orderedItems) {
+                 List<Integer> orderedItems) {
 
         this.orderId = orderId;
         this.customerEmail = customerEmail;
@@ -47,7 +47,7 @@ public class Order {
         return deliveryFee;
     }
 
-    public List<OrderItem> getOrderedItems() {
+    public List<Integer> getOrderedItems() {
         return orderedItems;
     }
 

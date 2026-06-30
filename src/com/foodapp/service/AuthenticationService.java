@@ -52,7 +52,6 @@ public class AuthenticationService {
         customer.setName(name);
         customer.setPhoneNo(phone);
         customer.setAddress(address);
-        customer.setAddress(address);
         customerRepository.addCustomer(customer);
     }
 

@@ -66,4 +66,8 @@ public abstract class User {
     public String getPhoneNo() {
         return phoneNumber;
     }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
 }

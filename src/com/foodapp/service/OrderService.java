@@ -17,21 +17,22 @@ public class OrderService {
     OrderStore orderRepository = new OrderStore();
     CustomerStore customerRepository = new CustomerStore();
 
-    public OrderItem createOrderItem(int foodId, int quantity) {
+    public int createOrderItem(int foodId, int quantity) {
 
         FoodItem foodItem = foodItemRepository.findById(foodId);
-
+        int id = orderRepository.getOrderItems().size()+1;
         if (foodItem == null) {
-            return null;
+            return 0;
         }
-
-        return new OrderItem(foodItem, quantity);
+        OrderItem orderItem =  new OrderItem(id,foodItem, quantity);
+        orderRepository.addOrderItem(orderItem);
+        return  id;
     }
 
     public String placeOrder(
             String customerEmail,
             int restaurantId,
-            ArrayList<OrderItem> items) {
+            ArrayList<Integer> items) {
 
         Restaurant restaurant = restaurantRepository.findById(restaurantId);
 
@@ -46,8 +47,9 @@ public class OrderService {
         }
 
         int totalPrice = 0;
-
-        for (OrderItem item : items) {
+        for(int id : items)
+        {
+            OrderItem item = orderRepository.getOrderItemById(id);
             totalPrice += item.getOrderedFood().getPrice() * item.getQuantity();
         }
 
@@ -146,7 +148,8 @@ public class OrderService {
         System.out.println("Restaurant Id : " + order.getRestaurantId());
         System.out.println("Status        : " + order.getOrderStatus());
         System.out.println("Items:");
-        for (OrderItem item : order.getOrderedItems()) {
+        for (int id : order.getOrderedItems()) {
+            OrderItem item = orderRepository.getOrderItemById(id);
             System.out.println(item.getOrderedFood().getFoodName() + " x " + item.getQuantity() + " = ₹" + item.getOrderedFood().getPrice());
         }
         System.out.println("Food Price    : ₹" + order.getFoodPrice());

@@ -22,7 +22,7 @@ import java.util.ArrayList;
     private final List<Restaurant> restaurants = new ArrayList<>();
     private final Map<Integer, Order> orders = new HashMap<>();
     private final List<FoodItem> foodItems = new ArrayList<>();
-
+    private final List<OrderItem> orderItems = new ArrayList<>();
 
     public Map<String, Customer> getCustomers() {
         return customers;
@@ -42,5 +42,9 @@ import java.util.ArrayList;
 
     public List<FoodItem> getFoodItems() {
         return foodItems;
+    }
+
+    public List<OrderItem> getOrderItems() {
+        return orderItems;
     }
 }

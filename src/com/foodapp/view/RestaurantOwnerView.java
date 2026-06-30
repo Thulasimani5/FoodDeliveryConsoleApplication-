@@ -49,8 +49,6 @@ public class RestaurantOwnerView {
     public void manageMenu(int restaurantId) {
 
         List<FoodItem> foodItems = foodItemService.getFoodItems(restaurantId);
-        boolean flag = true;
-        while (flag) {
             System.out.println("1. Add Food Item\n2.Update Food Item\n3.Remove Food Item\n4.View Food Items\n5.Exit");
             System.out.println("Enter the Option Number: ");
             int auth = scanner.nextInt();
@@ -59,14 +57,6 @@ public class RestaurantOwnerView {
                     addFoodItem(restaurantId);
                     break;
                 case 2:
-
-                    if (foodItems.isEmpty()) {
-                        System.out.println("No Food Items Found.");
-                    } else {
-                        for (FoodItem item : foodItems) {
-                            displayFood(item);
-                        }
-                    }
                     updateFoodItem(restaurantId);
                     break;
                 case 3:
@@ -91,13 +81,12 @@ public class RestaurantOwnerView {
                     }
                     break;
                 case 5:
-                    flag = false;
                     System.out.println("Exited");
                     break;
                 default:
                     System.out.println("Invalid Option");
             }
-        }
+
     }
 
     public void manageOrders(int restaurantId) {
