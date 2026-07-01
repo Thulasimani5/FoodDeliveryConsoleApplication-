@@ -1,64 +1,74 @@
 # FOOD DELIVERY DATABASE DESIGN
 
-## CUSTOMER TABLE
+USER TABLE
++--------------+------------------+--------------------------------+
+| Column       | Data Type        | Constraint                     |
++--------------+------------------+--------------------------------+
+| user_id      | INT              | PRIMARY KEY, AUTO_INCREMENT    |
+| name         | VARCHAR(100)     | NOT NULL                       |
+| email        | VARCHAR(100)     | UNIQUE, NOT NULL               |
+| phone_number | VARCHAR(15)      | UNIQUE, NOT NULL               |
+| password     | VARCHAR(255)     | NOT NULL                       |
+| created_at   | DATETIME         | NOT NULL                       |
+| updated_at   | DATETIME         | NOT NULL                       |
++--------------+------------------+--------------------------------+
 
-+-----------------+------------------------------------------+-------------------------------------------+
-| Column          | Data Type                                | Constraint                                |
-+-----------------+------------------------------------------+-------------------------------------------+
-| user_id         | INT                                      | PRIMARY KEY                               |
-| name            | VARCHAR(100)                             | NOT NULL                                  |
-| email           | VARCHAR(100)                             | UNIQUE, NOT NULL                          |
-| phone_number    | VARCHAR(15)                              | UNIQUE, NOT NULL                          |
-| password        | VARCHAR(255)                             | NOT NULL                                  |
-| role            | ENUM('Customer','RestaurantOwner')       | NOT NULL                                  |
-| building_number | VARCHAR(20)                              | NOT NULL                                  |
-| street          | VARCHAR(100)                             | NOT NULL                                  |
-| area            | VARCHAR(100)                             | NOT NULL                                  |
-| city            | VARCHAR(50)                              | NOT NULL                                  |
-| state           | VARCHAR(50)                              | NOT NULL                                  |
-| pin_code        | VARCHAR(10)                              | NOT NULL                                  |
-+-----------------+------------------------------------------+-------------------------------------------+
+ADDRESS TABLE
++-----------------+------------------+--------------------------------+
+| Column          | Data Type        | Constraint                     |
++-----------------+------------------+--------------------------------+
+| address_id      | INT              | PRIMARY KEY, AUTO_INCREMENT    |
+| building_number | VARCHAR(20)      | NOT NULL                       |
+| street          | VARCHAR(100)     | NOT NULL                       |
+| area            | VARCHAR(100)     | NOT NULL                       |
+| city            | VARCHAR(50)      | NOT NULL                       |
+| state           | VARCHAR(50)      | NOT NULL                       |
+| pin_code        | VARCHAR(10)      | NOT NULL                       |
+| created_at      | DATETIME         | NOT NULL                       |
+| updated_at      | DATETIME         | NOT NULL                       |
++-----------------+------------------+--------------------------------+
 
-## RESTAURANT OWNER TABLE
+RESTAURANTOWNER TABLE
++----------------+------------------+------------------------------+
+| Column         | Data Type        | Constraint                   |
++----------------+------------------+------------------------------+
+| restaurant_id  | INT              |                              |
+| owner_id       | INT              | FK → USER(user_id),PK        |
++----------------+------------------+------------------------------+
 
-+--------------+------------------------------------------+-------------------------------------------+
-| Column       | Data Type                                | Constraint                                |
-+--------------+------------------------------------------+-------------------------------------------+
-| user_id      | INT                                      | PRIMARY KEY                               |
-| name         | VARCHAR(100)                             | NOT NULL                                  |
-| email        | VARCHAR(100)                             | UNIQUE, NOT NULL                          |
-| phone_number | VARCHAR(15)                              | UNIQUE, NOT NULL                          |
-| password     | VARCHAR(255)                             | NOT NULL                                  |
-| role         | ENUM('Customer','RestaurantOwner')       | NOT NULL                                  |
-+--------------+------------------------------------------+-------------------------------------------+
+CUSTOMER TABLE (FINAL CLEAN VERSION)
++--------------+------------------+------------------------------+
+| Column       | Data Type        | Constraint                   |
++--------------+------------------+------------------------------+
+| customer_id  | INT              | PRIMARY KEY, FK → USER(user_id) |
+| address_id   | INT              | FK → ADDRESS(address_id)     |
++--------------+------------------+------------------------------+
 
-## RESTAURANT TABLE
+RESTAURANT TABLE
 
-+-----------------+---------------------------------------------------------------------+-------------------------------------------+
-| Column          | Data Type                                                           | Constraint                                |
-+-----------------+---------------------------------------------------------------------+-------------------------------------------+
-| restaurant_id   | INT                                                                 | PRIMARY KEY                               |
-| restaurant_name | VARCHAR(100)                                                        | NOT NULL                                  |
-| owner_id        | INT                                                                 | FOREIGN KEY → RestaurantOwner(user_id)    |
-| cuisine_type    | ENUM('INDIAN','ITALIAN','CHINESE','MEXICAN','AMERICAN',             | NOT NULL                                  |
-|                 |      'JAPANESE','FAST_FOOD','BAKERY')                               |                                           |
-| opening_time    | TIME                                                                | NOT NULL                                  |
-| closing_time    | TIME                                                                | NOT NULL                                  |
-| building_number | VARCHAR(20)                                                         | NOT NULL                                  |
-| street          | VARCHAR(100)                                                        | NOT NULL                                  |
-| area            | VARCHAR(100)                                                        | NOT NULL                                  |
-| city            | VARCHAR(50)                                                         | NOT NULL                                  |
-| state           | VARCHAR(50)                                                         | NOT NULL                                  |
-| pin_code        | VARCHAR(10)                                                         | NOT NULL                                  |
-+-----------------+---------------------------------------------------------------------+-------------------------------------------+
++-----------------+--------------------------------------+--------------------------------+
+| Column          | Data Type                            | Constraint                     |
++-----------------+--------------------------------------+--------------------------------+
+| restaurant_id   | INT                                  | PRIMARY KEY, AUTO_INCREMENT    |
+| owner_id        | INT                                  | UNIQUE, FK → USER(user_id)     |
+| restaurant_name | VARCHAR(100)                         | NOT NULL                       |
+| address_id      | INT                                  | FK → ADDRESS(address_id)       |
+| cuisine_type    | ENUM('INDIAN','ITALIAN','CHINESE',   | NOT NULL                       |
+|                 |      'MEXICAN','AMERICAN',           |                                |
+|                 |      'JAPANESE','FAST_FOOD',         |                                |
+|                 |      'BAKERY')                       |                                |
+| opening_time    | TIME                                 | NOT NULL                       |
+| closing_time    | TIME                                 | NOT NULL                       |
+| created_at      | DATETIME                             | NOT NULL                       |
+| updated_at      | DATETIME                             | NOT NULL                       |
++-----------------+--------------------------------------+--------------------------------+
 
-## FOOD ITEM TABLE
-
+FOOD ITEM TABLE
 +---------------+--------------------------------------+--------------------------------+
 | Column        | Data Type                            | Constraint                     |
 +---------------+--------------------------------------+--------------------------------+
-| food_id       | INT                                  | PRIMARY KEY                    |
-| restaurant_id | INT                                  | FOREIGN KEY                    |
+| food_id       | INT                                  | PRIMARY KEY, AUTO_INCREMENT    |
+| restaurant_id | INT                                  | FK → RESTAURANT               |
 | food_name     | VARCHAR(100)                         | NOT NULL                       |
 | description   | VARCHAR(255)                         | NOT NULL                       |
 | price         | DECIMAL(10,2)                        | NOT NULL                       |
@@ -66,10 +76,11 @@
 | quantity      | INT                                  | NOT NULL                       |
 | quantity_type | ENUM('PIECE','KG','GRAM','LITER')    | NOT NULL                       |
 | is_available  | BOOLEAN                              | NOT NULL                       |
+| created_at    | DATETIME                             | NOT NULL                       |
+| updated_at    | DATETIME                             | NOT NULL                       |
 +---------------+--------------------------------------+--------------------------------+
 
-## STARTER TABLE
-
+STARTER TABLE
 +-------------+----------------------------------------------+
 | Column      | Data Type                                    |
 +-------------+----------------------------------------------+
@@ -77,49 +88,65 @@
 | spice_level | ENUM('MILD','MEDIUM','SPICY','EXTRA_SPICY')  |
 +-------------+----------------------------------------------+
 
-## MAIN COURSE TABLE
+BEVERAGE TABLE
++-------------+--------------------------------------+
+| Column      | Data Type                            |
++-------------+--------------------------------------+
+| food_id     | INT (PK, FK → FoodItem.food_id)      |
+| size        | ENUM('SMALL','MEDIUM','LARGE')       |
+| sugar_free  | BOOLEAN                              |
+| is_cold     | BOOLEAN                              |
++-------------+--------------------------------------+
 
-+----------+--------------------------------+
-| Column   | Data Type                      |
-+----------+--------------------------------+
-| food_id  | INT (PK, FK → FoodItem.food_id)|
-+----------+--------------------------------+
+DESSERT TABLE
++----------------+--------------------------------------+
+| Column         | Data Type                            |
++----------------+--------------------------------------+
+| food_id        | INT (PK, FK → FoodItem.food_id)      |
+| eggless        | BOOLEAN                              |
+| contains_nuts  | BOOLEAN                              |
+| served_cold    | BOOLEAN                              |
++----------------+--------------------------------------+
 
-## BEVERAGE TABLE
-
-+-------------+-------------------------------------------+
-| Column      | Data Type                                 |
-+-------------+-------------------------------------------+
-| food_id     | INT (PK, FK → FoodItem.food_id)           |
-| size        | ENUM('SMALL','MEDIUM','LARGE')            |
-| sugar_free  | BOOLEAN                                   |
-| is_cold     | BOOLEAN                                   |
-+-------------+-------------------------------------------+
-
-## DESSERT TABLE
-
-+----------------+------------------------------------------+
-| Column         | Data Type                                |
-+----------------+------------------------------------------+
-| food_id        | INT (PK, FK → FoodItem.food_id)          |
-| eggless        | BOOLEAN                                  |
-| contains_nuts  | BOOLEAN                                  |
-| served_cold    | BOOLEAN                                  |
-+----------------+------------------------------------------+
 
 ## ORDER TABLE
++----------------+-----------------------------------------------------+----------------------------------+
+| Column         | Data Type                                           | Constraint                       |
++----------------+-----------------------------------------------------+----------------------------------+
+| order_id       | INT                                                 | PRIMARY KEY, AUTO_INCREMENT      |
+| customer_id    | INT                                                 | FK → CUSTOMER(customer_id)       |
+| restaurant_id  | INT                                                 | FK → RESTAURANT(restaurant_id)   |
+| product_cost   | DECIMAL(10,2)                                       | NOT NULL                         |
+| delivery_fee   | DECIMAL(10,2)                                       | NOT NULL                         |
+| order_status   | ENUM('PENDING','ACCEPTED','REJECTED',               | NOT NULL                         |
+|                |      'COMPLETED','CANCELLED')                       |                                  |
+| placed_at      | DATETIME                                            | NOT NULL                         |
+| updated_at     | DATETIME                                            | NOT NULL                         |
+| updated_by     | INT                                                 | FK → USER(user_id)               |
++----------------+-----------------------------------------------------+----------------------------------+
 
-+----------------+-----------------------------------------------------+----------------------------------------+
-| Column         | Data Type                                           | Constraint                             |
-+----------------+-----------------------------------------------------+----------------------------------------+
-| order_id       | INT                                                 | PRIMARY KEY                            |
-| customer_ID |  INT | FOREIGN KEY → Customer(user_id)          |
-| restaurant_id  | INT                                                 | FOREIGN KEY → Restaurant(restaurant_id)|
-| food_price     | DECIMAL(10,2)                                       | NOT NULL                               |
-| delivery_fee   | DECIMAL(10,2)                                       | NOT NULL                               |
-| order_status   | ENUM('PENDING','ACCEPTED','REJECTED',               | NOT NULL                               |
-|                |      'COMPLETED','CANCELLED')                       |                                        |
-+----------------+-----------------------------------------------------+----------------------------------------+
+
+CART TABLE
++---------------+------------------+--------------------------------+
+| Column        | Data Type        | Constraint                     |
++---------------+------------------+--------------------------------+
+| cart_id       | INT              | PRIMARY KEY, AUTO_INCREMENT    |
+| customer_id   | INT              | UNIQUE, FK → CUSTOMER(customer_id) |
+| restaurant_id | INT              | FK → RESTAURANT(restaurant_id) |
+| created_at    | DATETIME         | NOT NULL                       |
+| updated_at    | DATETIME         | NOT NULL                       |
++---------------+------------------+--------------------------------+
+
+CART ITEM TABLE
++------------+------------------+--------------------------------------+
+| Column     | Data Type        | Constraint                           |
++------------+------------------+--------------------------------------+
+| cart_id    | INT              | FK → CART(cart_id)                  |
+| food_id    | INT              | FK → FOOD_ITEM(food_id)             |
+| quantity   | INT              | NOT NULL                            |
+| PRIMARY KEY|                  | (cart_id, food_id)                  |
++------------+------------------+--------------------------------------+
+
 
 ## ORDER ITEM TABLE
 
@@ -146,3 +173,49 @@
 | contains_nuts  | BOOLEAN                                            | NULL                             |
 | served_cold    | BOOLEAN                                            | NULL                             |
 +----------------+----------------------------------------------------+----------------------------------+
+                                                    OR
+
+ORDER_ITEM TABLE
++---------------+------------------------------------------------+----------------------------------+
+| Column        | Data Type                                      | Constraint                       |
++---------------+------------------------------------------------+----------------------------------+
+| order_item_id | INT                                            | PRIMARY KEY                      |
+| order_id      | INT                                            | FK → ORDER(order_id)             |
+| food_id       | INT                                            | FK → FOOD_ITEM(food_id)          |
+| food_name     | VARCHAR(100)                                   | NOT NULL                         |
+| description   | TEXT                                           | NOT NULL                         |
+| price         | DECIMAL(10,2)                                  | NOT NULL                         |
+| food_type     | ENUM('VEG','NONVEG')                           | NOT NULL                         |
+| quantity_type | ENUM('PIECE','KG','GRAM','LITER')              | NOT NULL                         |
+| quantity      | INT                                            | NOT NULL                         |
+| restaurant_id | INT                                            | FK → RESTAURANT(restaurant_id)   |
+| category      | ENUM('STARTER','BEVERAGE','DESSERT','MAIN_COURSE') | NOT NULL                     |
++---------------+------------------------------------------------+----------------------------------+
+
+ORDER_STARTER
++---------------+----------------------------------------------+
+| Column        | Data Type                                    |
++---------------+----------------------------------------------+
+| order_item_id | INT (PK, FK → ORDER_ITEM.order_item_id)      |
+| spice_level   | ENUM('MILD','MEDIUM','SPICY','EXTRA_SPICY')  |
++---------------+----------------------------------------------+
+
+ORDER_BEVERAGE
++---------------+--------------------------------------+
+| Column        | Data Type                            |
++---------------+--------------------------------------+
+| order_item_id | INT (PK, FK → ORDER_ITEM.order_item_id) |
+| size          | ENUM('SMALL','MEDIUM','LARGE')       |
+| sugar_free    | BOOLEAN                              |
+| is_cold       | BOOLEAN                              |
++---------------+--------------------------------------+
+
+ORDER_DESSERT
++---------------+--------------------------------------+
+| Column        | Data Type                            |
++---------------+--------------------------------------+
+| order_item_id | INT (PK, FK → ORDER_ITEM.order_item_id) |
+| eggless       | BOOLEAN                              |
+| contains_nuts | BOOLEAN                              |
+| served_cold   | BOOLEAN                              |
++---------------+--------------------------------------+
